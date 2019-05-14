@@ -1,12 +1,13 @@
 #pragma once
 
-#include<set>
-#include<map>
-#include<utility>  //pair
+#include<set>	    
+#include<map>      
+#include<utility>  //pair类所在的头文件
 #include<string>
 #include<vector>
 #include<iostream>
-#include<fstream>
+#include<iomanip>
+#include<fstream>  
 #include<sstream>
 #include<algorithm>
 #include<iterator>
@@ -29,10 +30,10 @@ private:
 	set<set<string> > getCandiSet(map<set<string>, u_int> item); //由频繁k-1项集得到侯选k项集
 	map< set<string>, u_int> getFreqSet(set<set<string> > item); //由侯选项集得到频繁项集
 	void genRules(map< set<string>, u_int> items ); //由频繁项集生成关联规则
-	map<pair<set<string>, set<string> >, double> genRule(set<string>); //生成1项后件关联规则
+	map<pair<set<string>, set<string> >, double> genRule_begin(set<string>); //生成1项后件关联规则
 	void ap_genRules(set<string>, map<pair<set<string>, set<string> >, double >, int k); //由k项后件关联规则生成k+1项关联规则
 	void showFreqItem(u_int k, map<set<string>, u_int > item); //输出频繁项集
-	void showRules();
+	void showRules(); //输出关联规则
 	bool subSet(set<string> a, set<string> b); //判断a是否为b的子集
 public:
 	Apriori(string s1, string s2, double mSup, double mConf) {
@@ -47,8 +48,9 @@ public:
 
 };
 
+//从文件读取数据
 void Apriori::readData() {
-	ifstream inf(in);
+	ifstream inf(in); //从文件输入的流对象
 	if (!inf.is_open()) {
 		cout << "Error opening file!\n";
 		exit(1);
@@ -57,9 +59,9 @@ void Apriori::readData() {
 	dataBaseCnt = 0;
 	while (getline(inf, str)) {
 		set<string> line;
-		stringstream input(str);
+		stringstream input(str);  //字符串流对象
 		string res;
-		while (input >> res) { //按空格分割行输入
+		while (getline(input,res,',')) { //按逗号分割行输入
 			line.insert(res);
 		}
 		dataSet.push_back(line);
@@ -69,6 +71,7 @@ void Apriori::readData() {
 	inf.close();
 }
 
+//得到单项频繁项集
 map<set<string>, u_int> Apriori::getSingle() {
 	set<string>  C1;
 	for (vector<set<string> >::iterator i = dataSet.begin(); i != dataSet.end(); i++) {
@@ -90,6 +93,7 @@ map<set<string>, u_int> Apriori::getSingle() {
 	return L1;
 }
 
+//由k-1-频繁项集得到k-侯选项集
 set<set<string> > Apriori::getCandiSet(map<set<string>, u_int> item) {
 	set<set<string> > res;
 	map<set<string>, u_int>::iterator i = item.begin();
@@ -119,6 +123,7 @@ set<set<string> > Apriori::getCandiSet(map<set<string>, u_int> item) {
 	return res;
 }
 
+//由侯选项集得到频繁项集
 map<set<string>, u_int> Apriori::getFreqSet(set<set<string> > candiSet) {
 	vector<set<string> >::iterator i;
 	set<set<string> >::iterator check;
@@ -136,6 +141,7 @@ map<set<string>, u_int> Apriori::getFreqSet(set<set<string> > candiSet) {
 	return res;
 }
 
+//判断a是否b的子集
 bool Apriori::subSet(set<string> a, set<string> b) {
 	set<string> t;
 	set_difference(a.begin(), a.end(), b.begin(), b.end(), inserter(t, t.begin()));
@@ -146,7 +152,7 @@ bool Apriori::subSet(set<string> a, set<string> b) {
 }
 
 //生成1项后件的关联规则
-map<pair<set<string>, set<string> >, double> Apriori::genRule(set<string> freqItem) {
+map<pair<set<string>, set<string> >, double> Apriori::genRule_begin(set<string> freqItem) {
 	map<pair<set<string>, set<string>>, double> temp;
 	set<string>::iterator consequent = freqItem.begin();
 	while (consequent != freqItem.end()) {
@@ -204,30 +210,32 @@ void Apriori::ap_genRules(set<string> item, map<pair<set<string>, set<string> >,
 	ap_genRules(item, temp, k + 1);
 }
 
+//输出频繁项集及支持度
 void Apriori::showFreqItem(u_int k, map<set<string>, u_int> item) {
 	map<set<string>, u_int>::iterator i = item.begin();
 	ofstream inf(out, ios::app);
 	inf << endl << "频繁" << k << "项集为:" << endl;
-	inf << "项 集" << "\t\t" << "支持度" << endl;
+	inf <<left<< setw(30)<<"项 集" <<right<<setw(30)<< "支持度" << endl;
 	while (i != item.end()) {
 		set<string> s = i->first;
 		set<string>::iterator j = s.begin();
-		inf << "{";
+		inf <<"{";
 		while (j != s.end()) {
-			inf << *j << " ";
+			inf << *j << ",";
 			++j;
 		}
-		inf << "}" << "\t\t";
-		inf << i->second * 1.0 / dataBaseCnt << endl;
+		inf << "}" ;
+		inf <<setw(30)<<i->second * 1.0 / dataBaseCnt << endl;
 		++i;
 	}
 	inf.close();
 }
 
+//输出关联规则及置信度
 void Apriori::showRules() {
 	ofstream inf(out, ios::app);
 	inf << endl << "关联规则:" << endl;
-	inf << "规则\t\t" << "可信度\t\t" << endl;
+	inf <<left<<setw(30)<<"规则" <<right<<setw(30)<< "可信度" << endl;
 	map<pair<set<string>, set<string>>, double>::iterator i = rule.begin();
 	while (i != rule.end()) {
 		pair<set<string>, set<string> > P = i->first;
@@ -237,35 +245,37 @@ void Apriori::showRules() {
 		set<string>::iterator s2 = consequent.begin();
 		inf << "{";
 		while (s1 != antecedent.end()) {
-			inf << *s1 << " ";
+			inf << *s1 << ",";
 			++s1;
 		}
 		inf << "}";
 		inf << "==>>";
 		inf << "{";
 		while (s2 != consequent.end()) {
-			inf << *s2 << " ";
+			inf << *s2 << ",";
 			++s2;
 		}
-		inf << "}\t";
-		inf << i->second;
+		inf << "}";
+		inf << setw(30)<<i->second;
 		inf << endl;
 		++i;
 	}
 	inf.close();
 }
 
+//判断a是否为b的子集
 void Apriori::genRules(map< set<string>, u_int> items ) {
 	map<pair<set<string>, set<string>>, double> t;
 	map<set<string>, u_int>::iterator i = items.begin();
 	while (i != items.end()) {
 		set<string> item = i->first;
-		t = genRule(item);
+		t = genRule_begin(item);
 		ap_genRules(item, t, 2);
 		++i;
 	}
 }
 
+//算法整体框架
 void Apriori::process() {
 	readData();
 	cout << "从" << in << "读取成功..." << endl;
@@ -285,7 +295,7 @@ void Apriori::process() {
 			cout << "由" << i + 1<<"级频繁项集生成关联规则完毕 ..."<< endl;
 		}
 		else {
-			cout << i + 1 << "级频繁项集为空,无新的频繁项集生成" << endl;
+			cout << i + 1 << "级频繁项集为空,无新的频繁项集生成." << endl;
 			break;
 		}
 		showFreqItem(++i, k_item);

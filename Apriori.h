@@ -2,7 +2,7 @@
 
 #include<set>	    
 #include<map>      
-#include<utility>  //pairÀàËùÔÚµÄÍ·ÎÄ¼ş
+#include<utility>  //pairç±»æ‰€åœ¨çš„å¤´æ–‡ä»¶
 #include<string>
 #include<vector>
 #include<iostream>
@@ -19,22 +19,22 @@ class Apriori {
 private:
 	string in;
 	string out;
-	double minSup; //Ö§³Ö¶ÈãĞÖµ
-	double minConf; //ÖÃĞÅ¶ÈãĞÖµ
-	u_int dataBaseCnt; //ÊÂÎñÊı
-	map< set<string>, u_int >  supLabel; //Ö§³Ö¶È¼ÆÊı
-	vector< set<string> > dataSet; //Ô­Ê¼Êı¾İ¼¯
-	map < pair<set<string>, set<string> >, double > rule; //¹ØÁª¹æÔò
-	void readData(); //¶ÁÈ¡Êı¾İ
-	map< set<string>, u_int>  getSingle(); //µÃµ½µ¥ÏîÆµ·±Ïî¼¯
-	set<set<string> > getCandiSet(map<set<string>, u_int> item); //ÓÉÆµ·±k-1Ïî¼¯µÃµ½ºîÑ¡kÏî¼¯
-	map< set<string>, u_int> getFreqSet(set<set<string> > item); //ÓÉºîÑ¡Ïî¼¯µÃµ½Æµ·±Ïî¼¯
-	void genRules(map< set<string>, u_int> items ); //ÓÉÆµ·±Ïî¼¯Éú³É¹ØÁª¹æÔò
-	map<pair<set<string>, set<string> >, double> genRule_begin(set<string>); //Éú³É1Ïîºó¼ş¹ØÁª¹æÔò
-	void ap_genRules(set<string>, map<pair<set<string>, set<string> >, double >, int k); //ÓÉkÏîºó¼ş¹ØÁª¹æÔòÉú³Ék+1Ïî¹ØÁª¹æÔò
-	void showFreqItem(u_int k, map<set<string>, u_int > item); //Êä³öÆµ·±Ïî¼¯
-	void showRules(); //Êä³ö¹ØÁª¹æÔò
-	bool subSet(set<string> a, set<string> b); //ÅĞ¶ÏaÊÇ·ñÎªbµÄ×Ó¼¯
+	double minSup; //æ”¯æŒåº¦é˜ˆå€¼
+	double minConf; //ç½®ä¿¡åº¦é˜ˆå€¼
+	u_int dataBaseCnt; //äº‹åŠ¡æ•°
+	map< set<string>, u_int >  supLabel; //æ”¯æŒåº¦è®¡æ•°
+	vector< set<string> > dataSet; //åŸå§‹æ•°æ®é›†
+	map < pair<set<string>, set<string> >, double > rule; //å…³è”è§„åˆ™
+	void readData(); //è¯»å–æ•°æ®
+	map< set<string>, u_int>  getSingle(); //å¾—åˆ°å•é¡¹é¢‘ç¹é¡¹é›†
+	set<set<string> > getCandiSet(map<set<string>, u_int> item); //ç”±é¢‘ç¹k-1é¡¹é›†å¾—åˆ°ä¾¯é€‰ké¡¹é›†
+	map< set<string>, u_int> getFreqSet(set<set<string> > item); //ç”±ä¾¯é€‰é¡¹é›†å¾—åˆ°é¢‘ç¹é¡¹é›†
+	void genRules(map< set<string>, u_int> items ); //ç”±é¢‘ç¹é¡¹é›†ç”Ÿæˆå…³è”è§„åˆ™
+	map<pair<set<string>, set<string> >, double> genRule_begin(set<string>); //ç”Ÿæˆ1é¡¹åä»¶å…³è”è§„åˆ™
+	void ap_genRules(set<string>, map<pair<set<string>, set<string> >, double >, int k); //ç”±ké¡¹åä»¶å…³è”è§„åˆ™ç”Ÿæˆk+1é¡¹å…³è”è§„åˆ™
+	void showFreqItem(u_int k, map<set<string>, u_int > item); //è¾“å‡ºé¢‘ç¹é¡¹é›†
+	void showRules(); //è¾“å‡ºå…³è”è§„åˆ™
+	bool subSet(set<string> a, set<string> b); //åˆ¤æ–­aæ˜¯å¦ä¸ºbçš„å­é›†
 public:
 	Apriori(string s1, string s2, double mSup, double mConf) {
 		in = s1;
@@ -44,13 +44,13 @@ public:
 		dataBaseCnt = 0;
 	}
 	~Apriori() {};
-	void process();//ÕûÌåËã·¨¿ò¼Ü
+	void process();//æ•´ä½“ç®—æ³•æ¡†æ¶
 
 };
 
-//´ÓÎÄ¼ş¶ÁÈ¡Êı¾İ
+//ä»æ–‡ä»¶è¯»å–æ•°æ®
 void Apriori::readData() {
-	ifstream inf(in); //´ÓÎÄ¼şÊäÈëµÄÁ÷¶ÔÏó
+	ifstream inf(in); //ä»æ–‡ä»¶è¾“å…¥çš„æµå¯¹è±¡
 	if (!inf.is_open()) {
 		cout << "Error opening file!\n";
 		exit(1);
@@ -59,9 +59,9 @@ void Apriori::readData() {
 	dataBaseCnt = 0;
 	while (getline(inf, str)) {
 		set<string> line;
-		stringstream input(str);  //×Ö·û´®Á÷¶ÔÏó
+		stringstream input(str);  //å­—ç¬¦ä¸²æµå¯¹è±¡
 		string res;
-		while (getline(input,res,',')) { //°´¶ººÅ·Ö¸îĞĞÊäÈë
+		while (getline(input,res,',')) { //æŒ‰é€—å·åˆ†å‰²è¡Œè¾“å…¥
 			line.insert(res);
 		}
 		dataSet.push_back(line);
@@ -71,7 +71,7 @@ void Apriori::readData() {
 	inf.close();
 }
 
-//µÃµ½µ¥ÏîÆµ·±Ïî¼¯
+//å¾—åˆ°å•é¡¹é¢‘ç¹é¡¹é›†
 map<set<string>, u_int> Apriori::getSingle() {
 	set<string>  C1;
 	for (vector<set<string> >::iterator i = dataSet.begin(); i != dataSet.end(); i++) {
@@ -93,7 +93,7 @@ map<set<string>, u_int> Apriori::getSingle() {
 	return L1;
 }
 
-//ÓÉk-1-Æµ·±Ïî¼¯µÃµ½k-ºîÑ¡Ïî¼¯
+//ç”±k-1-é¢‘ç¹é¡¹é›†å¾—åˆ°k-ä¾¯é€‰é¡¹é›†
 set<set<string> > Apriori::getCandiSet(map<set<string>, u_int> item) {
 	set<set<string> > res;
 	map<set<string>, u_int>::iterator i = item.begin();
@@ -123,7 +123,7 @@ set<set<string> > Apriori::getCandiSet(map<set<string>, u_int> item) {
 	return res;
 }
 
-//ÓÉºîÑ¡Ïî¼¯µÃµ½Æµ·±Ïî¼¯
+//ç”±ä¾¯é€‰é¡¹é›†å¾—åˆ°é¢‘ç¹é¡¹é›†
 map<set<string>, u_int> Apriori::getFreqSet(set<set<string> > candiSet) {
 	vector<set<string> >::iterator i;
 	set<set<string> >::iterator check;
@@ -141,7 +141,7 @@ map<set<string>, u_int> Apriori::getFreqSet(set<set<string> > candiSet) {
 	return res;
 }
 
-//ÅĞ¶ÏaÊÇ·ñbµÄ×Ó¼¯
+//åˆ¤æ–­aæ˜¯å¦bçš„å­é›†
 bool Apriori::subSet(set<string> a, set<string> b) {
 	set<string> t;
 	set_difference(a.begin(), a.end(), b.begin(), b.end(), inserter(t, t.begin()));
@@ -151,7 +151,7 @@ bool Apriori::subSet(set<string> a, set<string> b) {
 	return false;
 }
 
-//Éú³É1Ïîºó¼şµÄ¹ØÁª¹æÔò
+//ç”Ÿæˆ1é¡¹åä»¶çš„å…³è”è§„åˆ™
 map<pair<set<string>, set<string> >, double> Apriori::genRule_begin(set<string> freqItem) {
 	map<pair<set<string>, set<string>>, double> temp;
 	set<string>::iterator consequent = freqItem.begin();
@@ -170,7 +170,7 @@ map<pair<set<string>, set<string> >, double> Apriori::genRule_begin(set<string> 
 	return temp;
 }
 
-//ÓÉk-1Ïîºó¼ş¹ØÁª¹æÔòÉú³ÉkÏîºó¼ş¹ØÁª¹æÔò (µİ¹éÉú³É)
+//ç”±k-1é¡¹åä»¶å…³è”è§„åˆ™ç”Ÿæˆké¡¹åä»¶å…³è”è§„åˆ™ (é€’å½’ç”Ÿæˆ)
 void Apriori::ap_genRules(set<string> item, map<pair<set<string>, set<string> >, double> H, int k) {
 	if (k == item.size()) return;
 	map<pair<set<string>, set<string>>, double>::iterator i = H.begin();
@@ -210,12 +210,12 @@ void Apriori::ap_genRules(set<string> item, map<pair<set<string>, set<string> >,
 	ap_genRules(item, temp, k + 1);
 }
 
-//Êä³öÆµ·±Ïî¼¯¼°Ö§³Ö¶È
+//è¾“å‡ºé¢‘ç¹é¡¹é›†åŠæ”¯æŒåº¦
 void Apriori::showFreqItem(u_int k, map<set<string>, u_int> item) {
 	map<set<string>, u_int>::iterator i = item.begin();
 	ofstream inf(out, ios::app);
-	inf << endl << "Æµ·±" << k << "Ïî¼¯Îª:" << endl;
-	inf <<left<< setw(30)<<"Ïî ¼¯" <<right<<setw(30)<< "Ö§³Ö¶È" << endl;
+	inf << endl << "é¢‘ç¹" << k << "é¡¹é›†ä¸º:" << endl;
+	inf <<left<< setw(30)<<"é¡¹ é›†" <<right<<setw(30)<< "æ”¯æŒåº¦" << endl;
 	while (i != item.end()) {
 		set<string> s = i->first;
 		set<string>::iterator j = s.begin();
@@ -231,11 +231,11 @@ void Apriori::showFreqItem(u_int k, map<set<string>, u_int> item) {
 	inf.close();
 }
 
-//Êä³ö¹ØÁª¹æÔò¼°ÖÃĞÅ¶È
+//è¾“å‡ºå…³è”è§„åˆ™åŠç½®ä¿¡åº¦
 void Apriori::showRules() {
 	ofstream inf(out, ios::app);
-	inf << endl << "¹ØÁª¹æÔò:" << endl;
-	inf <<left<<setw(30)<<"¹æÔò" <<right<<setw(30)<< "¿ÉĞÅ¶È" << endl;
+	inf << endl << "å…³è”è§„åˆ™:" << endl;
+	inf <<left<<setw(30)<<"è§„åˆ™" <<right<<setw(30)<< "å¯ä¿¡åº¦" << endl;
 	map<pair<set<string>, set<string>>, double>::iterator i = rule.begin();
 	while (i != rule.end()) {
 		pair<set<string>, set<string> > P = i->first;
@@ -263,7 +263,7 @@ void Apriori::showRules() {
 	inf.close();
 }
 
-//ÅĞ¶ÏaÊÇ·ñÎªbµÄ×Ó¼¯
+//åˆ¤æ–­aæ˜¯å¦ä¸ºbçš„å­é›†
 void Apriori::genRules(map< set<string>, u_int> items ) {
 	map<pair<set<string>, set<string>>, double> t;
 	map<set<string>, u_int>::iterator i = items.begin();
@@ -275,31 +275,31 @@ void Apriori::genRules(map< set<string>, u_int> items ) {
 	}
 }
 
-//Ëã·¨ÕûÌå¿ò¼Ü
+//ç®—æ³•æ•´ä½“æ¡†æ¶
 void Apriori::process() {
 	readData();
-	cout << "´Ó" << in << "¶ÁÈ¡³É¹¦..." << endl;
+	cout << "ä»" << in << "è¯»å–æˆåŠŸ..." << endl;
 	map<set<string>, u_int> k_item;
 	k_item = getSingle();
-	cout << "µ¥ÏîÆµ·±Ïî¼¯´¦ÀíÍê³É..." << endl;
+	cout << "å•é¡¹é¢‘ç¹é¡¹é›†å¤„ç†å®Œæˆ..." << endl;
 	showFreqItem(1, k_item);
 	int i = 1;
 	while (true) {
 		set<set<string> > ck_item;
 		ck_item = getCandiSet(k_item);
-		cout << i + 1 << "¼¶ºîÑ¡Ïî¼¯Éú³ÉÍê±Ï..." << endl;
+		cout << i + 1 << "çº§ä¾¯é€‰é¡¹é›†ç”Ÿæˆå®Œæ¯•..." << endl;
 		k_item = getFreqSet(ck_item);
-		cout << i + 1 << "¼¶Æµ·±Ïî¼¯Éú³ÉÍê±Ï..." << endl;
+		cout << i + 1 << "çº§é¢‘ç¹é¡¹é›†ç”Ÿæˆå®Œæ¯•..." << endl;
 		if (k_item.size()) {
 			genRules(k_item);
-			cout << "ÓÉ" << i + 1<<"¼¶Æµ·±Ïî¼¯Éú³É¹ØÁª¹æÔòÍê±Ï ..."<< endl;
+			cout << "ç”±" << i + 1<<"çº§é¢‘ç¹é¡¹é›†ç”Ÿæˆå…³è”è§„åˆ™å®Œæ¯• ..."<< endl;
 		}
 		else {
-			cout << i + 1 << "¼¶Æµ·±Ïî¼¯Îª¿Õ,ÎŞĞÂµÄÆµ·±Ïî¼¯Éú³É." << endl;
+			cout << i + 1 << "çº§é¢‘ç¹é¡¹é›†ä¸ºç©º,æ— æ–°çš„é¢‘ç¹é¡¹é›†ç”Ÿæˆ." << endl;
 			break;
 		}
 		showFreqItem(++i, k_item);
 	}
 	showRules();
-	cout << "´¦ÀíÍê±Ï,½á¹û±£´æÔÚ" << out << endl;
+	cout << "å¤„ç†å®Œæ¯•,ç»“æœä¿å­˜åœ¨" << out << endl;
 }

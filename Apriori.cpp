@@ -4,16 +4,16 @@
 using namespace std;
 
 int main() {
-	cout << "ÊäÈëÊý¾ÝÔ´ÎÄ¼þÃû:" << endl;
+	cout << "è¾“å…¥æ•°æ®æºæ–‡ä»¶å:" << endl;
 	string filename1,filename2;
 	double minConf;
 	double minSup;
 	cin >> filename1;
-	cout << "ÊäÈëÖ§³Ö¶ÈãÐÖµ:" << endl;
+	cout << "è¾“å…¥æ”¯æŒåº¦é˜ˆå€¼:" << endl;
 	cin >> minSup;
-	cout << "ÊäÈëÖÃÐÅ¶ÈãÐÖµ:" << endl;
+	cout << "è¾“å…¥ç½®ä¿¡åº¦é˜ˆå€¼:" << endl;
 	cin >> minConf;
-	cout << "ÊäÈë½á¹ûµ¼³öÎÄ¼þÃû" << endl;
+	cout << "è¾“å…¥ç»“æžœå¯¼å‡ºæ–‡ä»¶å" << endl;
 	cin >> filename2;
 	Apriori A = Apriori(filename1, filename2, minSup, minConf);
 	A.process();
